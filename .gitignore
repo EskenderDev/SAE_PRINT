@@ -1,5 +1,11 @@
+# .NET Standard gitignore templates
+bin/
+obj/
+TestResults/
 [Bb]in/
 [Oo]bj/
+
+# Visual Studio
 .vs/
 .vscode/
 *.user
@@ -7,5 +13,18 @@
 *.userosscache
 *.sln.doccache
 .idea/
+
+# NuGet
 *.nupkg
+*.snupkg
+node_modules/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Gemini / Antigravity
 .gemini/
+.agents/
+.agent/
+brain/

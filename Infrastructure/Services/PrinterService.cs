@@ -47,6 +47,11 @@ public class PrinterService : IPrinterService
         return PrintBytes(printerName, data, "");
     }
 
+    public bool PrintRaw(string printerName, byte[] data, string docName = "")
+    {
+        return PrintBytes(printerName, data, docName);
+    }
+
     private bool PrintBytes(string printerName, byte[] data, string docName)
     {
         if (!_transport.Open(printerName))
