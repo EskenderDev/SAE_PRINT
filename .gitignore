@@ -28,3 +28,7 @@ Thumbs.db
 .agents/
 .agent/
 brain/
+
+# Build logs
+build_error/
+build_log/

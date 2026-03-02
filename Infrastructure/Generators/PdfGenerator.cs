@@ -1,6 +1,6 @@
 using PdfSharp.Drawing;
 using PdfSharp.Pdf;
-using SAE.Sdk.Models;
+using SAE.Print.Core.Models;
 using SAE.Print.Core.Interfaces;
 
 using SAE.Print.Core.Enums;

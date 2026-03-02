@@ -1,4 +1,4 @@
-using SAE.Sdk.Models;
+using SAE.Print.Core.Models;
 
 namespace SAE.Print.Core.Interfaces;
 

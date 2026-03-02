@@ -36,10 +36,6 @@
     <PackageReference Include="Microsoft.Extensions.Logging" Version="10.0.3" />
   </ItemGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\SAE_SDKs\csharp\SAE.Sdk.csproj" />
-  </ItemGroup>
-
 </Project>
 
 

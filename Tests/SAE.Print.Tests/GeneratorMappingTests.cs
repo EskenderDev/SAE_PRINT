@@ -1,5 +1,5 @@
 using SAE.Print.Infrastructure.Generators;
-using SAE.Sdk.Models;
+using SAE.Print.Core.Models;
 using Xunit;
 using Microsoft.Extensions.Logging.Abstractions;
 using PdfSharp;
