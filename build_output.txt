@@ -1,0 +1,27 @@
+  Determinando los proyectos que se van a restaurar...
+  Se ha restaurado C:\Proyectos\repos\EskenderDev\HACIENDA_CR_XML\Library\FirmaXaDES\FirmaXadesNet\FIRMA_XADEX_NET.csproj (en 226 ms).
+  Se ha restaurado C:\Proyectos\repos\EskenderDev\HACIENDA_CR_XML\SAE_GENERATE\SAE_GENERATE.csproj (en 226 ms).
+  Se ha restaurado C:\Proyectos\repos\EskenderDev\HACIENDA_CR_XML\SAE_SIGN\SAE_SIGN.csproj (en 226 ms).
+  Se ha restaurado C:\Proyectos\repos\EskenderDev\HACIENDA_CR_XML\SAE_PRINT\SAE_PRINT.csproj (en 226 ms).
+  FIRMA_XADEX_NET -> C:\Proyectos\repos\EskenderDev\HACIENDA_CR_XML\Library\FirmaXaDES\FirmaXadesNet\bin\Debug\net10.0\FIRMA_XADEX_NET.dll
+  SAE_SIGN -> C:\Proyectos\repos\EskenderDev\HACIENDA_CR_XML\SAE_SIGN\bin\Debug\net10.0\SAE.Sign.dll
+  SAE_GENERATE -> C:\Proyectos\repos\EskenderDev\HACIENDA_CR_XML\SAE_GENERATE\bin\Debug\net10.0\SAE.Generate.dll
+C:\Proyectos\repos\EskenderDev\HACIENDA_CR_XML\SAE_PRINT\Labels\Servicios\ILabelRenderer.cs(23,116): warning CS8625: No se puede convertir un literal NULL en un tipo de referencia que no acepta valores NULL. [C:\Proyectos\repos\EskenderDev\HACIENDA_CR_XML\SAE_PRINT\SAE_PRINT.csproj]
+C:\Proyectos\repos\EskenderDev\HACIENDA_CR_XML\SAE_PRINT\Labels\Modelos\TemplateObject.cs(69,21): warning CS0108: 'ImageObject.LockAspectRatio' oculta el miembro heredado 'TemplateObject.LockAspectRatio'. Use la palabra clave new si su intención era ocultarlo. [C:\Proyectos\repos\EskenderDev\HACIENDA_CR_XML\SAE_PRINT\SAE_PRINT.csproj]
+C:\Proyectos\repos\EskenderDev\HACIENDA_CR_XML\SAE_PRINT\Labels\Servicios\LabelRenderer.cs(409,63): error CS0104: 'WrapMode' es una referencia ambigua entre 'SAE_PRINT.Labels.Modelos.WrapMode' y 'System.Drawing.Drawing2D.WrapMode' [C:\Proyectos\repos\EskenderDev\HACIENDA_CR_XML\SAE_PRINT\SAE_PRINT.csproj]
+C:\Proyectos\repos\EskenderDev\HACIENDA_CR_XML\SAE_PRINT\Labels\Servicios\LabelRenderer.cs(469,26): error CS0104: 'WrapMode' es una referencia ambigua entre 'SAE_PRINT.Labels.Modelos.WrapMode' y 'System.Drawing.Drawing2D.WrapMode' [C:\Proyectos\repos\EskenderDev\HACIENDA_CR_XML\SAE_PRINT\SAE_PRINT.csproj]
+C:\Proyectos\repos\EskenderDev\HACIENDA_CR_XML\SAE_PRINT\Labels\Servicios\PrinterOptimizer.cs(12,68): warning CS8625: No se puede convertir un literal NULL en un tipo de referencia que no acepta valores NULL. [C:\Proyectos\repos\EskenderDev\HACIENDA_CR_XML\SAE_PRINT\SAE_PRINT.csproj]
+C:\Proyectos\repos\EskenderDev\HACIENDA_CR_XML\SAE_PRINT\Labels\Servicios\LabelRenderer.cs(140,123): warning CS8625: No se puede convertir un literal NULL en un tipo de referencia que no acepta valores NULL. [C:\Proyectos\repos\EskenderDev\HACIENDA_CR_XML\SAE_PRINT\SAE_PRINT.csproj]
+
+ERROR al compilar.
+
+C:\Proyectos\repos\EskenderDev\HACIENDA_CR_XML\SAE_PRINT\Labels\Servicios\ILabelRenderer.cs(23,116): warning CS8625: No se puede convertir un literal NULL en un tipo de referencia que no acepta valores NULL. [C:\Proyectos\repos\EskenderDev\HACIENDA_CR_XML\SAE_PRINT\SAE_PRINT.csproj]
+C:\Proyectos\repos\EskenderDev\HACIENDA_CR_XML\SAE_PRINT\Labels\Modelos\TemplateObject.cs(69,21): warning CS0108: 'ImageObject.LockAspectRatio' oculta el miembro heredado 'TemplateObject.LockAspectRatio'. Use la palabra clave new si su intención era ocultarlo. [C:\Proyectos\repos\EskenderDev\HACIENDA_CR_XML\SAE_PRINT\SAE_PRINT.csproj]
+C:\Proyectos\repos\EskenderDev\HACIENDA_CR_XML\SAE_PRINT\Labels\Servicios\PrinterOptimizer.cs(12,68): warning CS8625: No se puede convertir un literal NULL en un tipo de referencia que no acepta valores NULL. [C:\Proyectos\repos\EskenderDev\HACIENDA_CR_XML\SAE_PRINT\SAE_PRINT.csproj]
+C:\Proyectos\repos\EskenderDev\HACIENDA_CR_XML\SAE_PRINT\Labels\Servicios\LabelRenderer.cs(140,123): warning CS8625: No se puede convertir un literal NULL en un tipo de referencia que no acepta valores NULL. [C:\Proyectos\repos\EskenderDev\HACIENDA_CR_XML\SAE_PRINT\SAE_PRINT.csproj]
+C:\Proyectos\repos\EskenderDev\HACIENDA_CR_XML\SAE_PRINT\Labels\Servicios\LabelRenderer.cs(409,63): error CS0104: 'WrapMode' es una referencia ambigua entre 'SAE_PRINT.Labels.Modelos.WrapMode' y 'System.Drawing.Drawing2D.WrapMode' [C:\Proyectos\repos\EskenderDev\HACIENDA_CR_XML\SAE_PRINT\SAE_PRINT.csproj]
+C:\Proyectos\repos\EskenderDev\HACIENDA_CR_XML\SAE_PRINT\Labels\Servicios\LabelRenderer.cs(469,26): error CS0104: 'WrapMode' es una referencia ambigua entre 'SAE_PRINT.Labels.Modelos.WrapMode' y 'System.Drawing.Drawing2D.WrapMode' [C:\Proyectos\repos\EskenderDev\HACIENDA_CR_XML\SAE_PRINT\SAE_PRINT.csproj]
+    4 Advertencia(s)
+    2 Errores
+
+Tiempo transcurrido 00:00:01.66
