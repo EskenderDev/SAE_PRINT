@@ -3,6 +3,9 @@ using PdfSharp.Pdf;
 using SAE.Sdk.Models;
 using SAE.Print.Core.Interfaces;
 
+using SAE.Print.Core.Enums;
+using PdfSharp;
+
 namespace SAE.Print.Infrastructure.Generators;
 
 public class PdfGenerator : IPdfGenerator
@@ -10,13 +13,25 @@ public class PdfGenerator : IPdfGenerator
     private const double Margin = 40;
     private const double LineHeight = 15;
 
-    public Task<byte[]> GenerateAsync(GenerarDocumentoRequest documento)
+    public Task<byte[]> GenerateAsync(GenerarDocumentoRequest documento, PaperSize paperSize = PaperSize.Letter)
     {
         using var stream = new MemoryStream();
         var document = new PdfDocument();
         document.Info.Title = $"Documento {documento.Consecutivo.NumeroConsecutivo}";
 
         var page = document.AddPage();
+        
+        // Set Page Size
+        if (paperSize == PaperSize.HalfLetter)
+        {
+            page.Width = XUnit.FromInch(5.5);
+            page.Height = XUnit.FromInch(8.5);
+        }
+        else // Default or Letter
+        {
+            page.Size = PageSize.Letter;
+        }
+
         var gfx = XGraphics.FromPdfPage(page);
 
         // Fuentes
@@ -95,25 +110,28 @@ public class PdfGenerator : IPdfGenerator
 
     private void DrawLines(XGraphics gfx, List<LineaDetalleRequest> lineas, XFont headerFont, XFont bodyFont, ref double y, double pageWidth)
     {
-        double col1 = Margin;
-        double col2 = Margin + 40;
-        double col3 = Margin + 300;
-        double col4 = Margin + 400;
+        double availableWidth = pageWidth - (Margin * 2);
+        
+        // Calculate proportional columns
+        double colQty = Margin;
+        double colDesc = Margin + (availableWidth * 0.15);
+        double colPrice = Margin + (availableWidth * 0.65);
+        double colTotal = Margin + (availableWidth * 0.85);
 
-        gfx.DrawString("Cant.", headerFont, XBrushes.Black, new XPoint(col1, y), XStringFormats.Default);
-        gfx.DrawString("Descripción", headerFont, XBrushes.Black, new XPoint(col2, y), XStringFormats.Default);
-        gfx.DrawString("Precio U.", headerFont, XBrushes.Black, new XPoint(col3, y), XStringFormats.Default);
-        gfx.DrawString("Total", headerFont, XBrushes.Black, new XPoint(col4, y), XStringFormats.Default);
+        gfx.DrawString("Cant.", headerFont, XBrushes.Black, new XPoint(colQty, y), XStringFormats.Default);
+        gfx.DrawString("Descripción", headerFont, XBrushes.Black, new XPoint(colDesc, y), XStringFormats.Default);
+        gfx.DrawString("Precio U.", headerFont, XBrushes.Black, new XPoint(colPrice, y), XStringFormats.Default);
+        gfx.DrawString("Total", headerFont, XBrushes.Black, new XPoint(colTotal, y), XStringFormats.Default);
 
         y += LineHeight + 5;
         gfx.DrawLine(XPens.Black, Margin, y - 5, pageWidth - Margin, y - 5);
 
         foreach (var linea in lineas)
         {
-            gfx.DrawString(linea.Cantidad.ToString("N2"), bodyFont, XBrushes.Black, new XPoint(col1, y), XStringFormats.Default);
-            gfx.DrawString(linea.Detalle ?? string.Empty, bodyFont, XBrushes.Black, new XPoint(col2, y), XStringFormats.Default);
-            gfx.DrawString(linea.PrecioUnitario.ToString("N2"), bodyFont, XBrushes.Black, new XPoint(col3, y), XStringFormats.Default);
-            gfx.DrawString((linea.MontoTotal ?? 0m).ToString("N2"), bodyFont, XBrushes.Black, new XPoint(col4, y), XStringFormats.Default);
+            gfx.DrawString(linea.Cantidad.ToString("N2"), bodyFont, XBrushes.Black, new XPoint(colQty, y), XStringFormats.Default);
+            gfx.DrawString(linea.Detalle ?? string.Empty, bodyFont, XBrushes.Black, new XPoint(colDesc, y), XStringFormats.Default);
+            gfx.DrawString(linea.PrecioUnitario.ToString("N2"), bodyFont, XBrushes.Black, new XPoint(colPrice, y), XStringFormats.Default);
+            gfx.DrawString((linea.MontoTotal ?? 0m).ToString("N2"), bodyFont, XBrushes.Black, new XPoint(colTotal, y), XStringFormats.Default);
             y += LineHeight;
         }
 
@@ -122,7 +140,7 @@ public class PdfGenerator : IPdfGenerator
 
     private void DrawTotals(XGraphics gfx, ResumenFacturaRequest resumen, XFont headerFont, XFont bodyFont, ref double y, double pageWidth)
     {
-        double xLabel = pageWidth - Margin - 200;
+        double xLabel = pageWidth - Margin - 150;
         double xValue = pageWidth - Margin - 50;
 
         DrawTotalLine(gfx, "SubTotal:", resumen.TotalVenta ?? 0m, bodyFont, xLabel, xValue, ref y);
