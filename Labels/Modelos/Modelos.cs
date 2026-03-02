@@ -6,37 +6,37 @@ namespace SAE.Print.Labels.Modelos
     public class GlabelsTemplate
     {
         [JsonPropertyName("brand")]
-        public string Brand { get; set; }
+        public string Brand { get; set; } = string.Empty;
 
         [JsonPropertyName("description")]
-        public string Description { get; set; }
+        public string Description { get; set; } = string.Empty;
 
         [JsonPropertyName("part")]
-        public string Part { get; set; }
+        public string Part { get; set; } = string.Empty;
 
         [JsonPropertyName("size")]
-        public string Size { get; set; }
+        public string Size { get; set; } = string.Empty;
 
         [JsonPropertyName("productUrl")]
-        public string ProductUrl { get; set; }
+        public string ProductUrl { get; set; } = string.Empty;
 
         [JsonPropertyName("labelRectangle")]
-        public LabelRectangle LabelRectangle { get; set; }
+        public LabelRectangle LabelRectangle { get; set; } = new();
 
         [JsonPropertyName("objects")]
-        public List<TemplateObject> Objects { get; set; } = new List<TemplateObject>();
+        public List<TemplateObject> Objects { get; set; } = new();
 
         [JsonPropertyName("variables")]
-        public List<TemplateVariable> Variables { get; set; } = new List<TemplateVariable>();
+        public List<TemplateVariable> Variables { get; set; } = new();
 
         [JsonPropertyName("lastModified")]
         public DateTime LastModified { get; set; } = DateTime.Now;
 
         [JsonPropertyName("filePath")]
-        public string FilePath { get; set; }
+        public string FilePath { get; set; } = string.Empty;
 
         [JsonIgnore]
-        public Dictionary<string, IncrementalState> IncrementalStates { get; set; } = new Dictionary<string, IncrementalState>();
+        public Dictionary<string, IncrementalState> IncrementalStates { get; set; } = new();
     }
 
     public class LabelRectangle
@@ -57,7 +57,7 @@ namespace SAE.Print.Labels.Modelos
         public double YWaste { get; set; }
 
         [JsonPropertyName("layout")]
-        public Layout Layout { get; set; }
+        public Layout Layout { get; set; } = new();
     }
 
     public class Layout
@@ -84,89 +84,55 @@ namespace SAE.Print.Labels.Modelos
     public class TransformationMatrix
     {
         [JsonPropertyName("a")]
-        public double A { get; set; } = 1;  // Scale X
+        public double A { get; set; } = 1;
 
         [JsonPropertyName("b")]
-        public double B { get; set; } = 0;  // Shear Y
+        public double B { get; set; } = 0;
 
         [JsonPropertyName("c")]
-        public double C { get; set; } = 0;  // Shear X
+        public double C { get; set; } = 0;
 
         [JsonPropertyName("d")]
-        public double D { get; set; } = 1;  // Scale Y
+        public double D { get; set; } = 1;
 
         [JsonPropertyName("e")]
-        public double E { get; set; } = 0;  // Translate X
+        public double E { get; set; } = 0;
 
         [JsonPropertyName("f")]
-        public double F { get; set; } = 0;  // Translate Y
+        public double F { get; set; } = 0;
 
         [JsonIgnore]
         public bool IsIdentity => A == 1 && B == 0 && C == 0 && D == 1 && E == 0 && F == 0;
 
-        // Constructor por defecto (matriz identidad)
         public TransformationMatrix() { }
 
-        // Constructor con parámetros
         public TransformationMatrix(double a, double b, double c, double d, double e, double f)
         {
-            A = a;
-            B = b;
-            C = c;
-            D = d;
-            E = e;
-            F = f;
+            A = a; B = b; C = c; D = d; E = e; F = f;
         }
 
-        // Método para crear una matriz de rotación
         public static TransformationMatrix CreateRotationMatrix(double angleInDegrees)
         {
-            var angleInRadians = angleInDegrees * Math.PI / 180.0;
-            var cos = Math.Cos(angleInRadians);
-            var sin = Math.Sin(angleInRadians);
-
-            return new TransformationMatrix(
-                cos, -sin,
-                sin, cos,
-                0, 0
-            );
+            var r = angleInDegrees * Math.PI / 180.0;
+            var cos = Math.Cos(r);
+            var sin = Math.Sin(r);
+            return new TransformationMatrix(cos, -sin, sin, cos, 0, 0);
         }
 
-        // Método para crear una matriz de escala
-        public static TransformationMatrix CreateScaleMatrix(double scaleX, double scaleY)
-        {
-            return new TransformationMatrix(
-                scaleX, 0,
-                0, scaleY,
-                0, 0
-            );
-        }
-
-        // Método para crear una matriz de traslación
-        public static TransformationMatrix CreateTranslationMatrix(double translateX, double translateY)
-        {
-            return new TransformationMatrix(
-                1, 0,
-                0, 1,
-                translateX, translateY
-            );
-        }
+        public static TransformationMatrix CreateScaleMatrix(double sx, double sy) => new(sx, 0, 0, sy, 0, 0);
+        public static TransformationMatrix CreateTranslationMatrix(double tx, double ty) => new(1, 0, 0, 1, tx, ty);
     }
 
     public class ShadowEffect
     {
         [JsonPropertyName("enabled")]
         public bool Enabled { get; set; }
-
         [JsonPropertyName("color")]
-        public string Color { get; set; }
-
+        public string Color { get; set; } = "#000000";
         [JsonPropertyName("opacity")]
         public double Opacity { get; set; }
-
         [JsonPropertyName("offsetX")]
         public double OffsetX { get; set; }
-
         [JsonPropertyName("offsetY")]
         public double OffsetY { get; set; }
     }
@@ -175,23 +141,23 @@ namespace SAE.Print.Labels.Modelos
     {
         [JsonPropertyName("name")]
         [XmlAttribute("name")]
-        public string Name { get; set; }
+        public string Name { get; set; } = string.Empty;
 
         [JsonPropertyName("type")]
         [XmlAttribute("type")]
-        public string Type { get; set; }
+        public string Type { get; set; } = string.Empty;
 
         [JsonPropertyName("initialValue")]
         [XmlAttribute("initialValue")]
-        public string InitialValue { get; set; }
+        public string InitialValue { get; set; } = string.Empty;
 
         [JsonPropertyName("increment")]
         [XmlAttribute("increment")]
-        public string Increment { get; set; } = "never";  // "never", "per_copy", "per_page", "per_session"
+        public string Increment { get; set; } = "never";
 
         [JsonPropertyName("stepSize")]
         [XmlAttribute("stepSize")]
-        public int StepSize { get; set; } = 0;
+        public int StepSize { get; set; }
 
         [JsonIgnore]
         [XmlIgnore]
@@ -201,175 +167,98 @@ namespace SAE.Print.Labels.Modelos
         [XmlIgnore]
         public bool IsIncremental => Increment != "never" && StepSize != 0;
 
-        // Método para inicializar el valor actual
         public void Initialize()
         {
-            if (int.TryParse(InitialValue, out int initial))
-            {
-                CurrentValue = initial;
-            }
-            else
-            {
-                CurrentValue = 0;
-            }
+            if (int.TryParse(InitialValue, out int initial)) CurrentValue = initial;
+            else CurrentValue = 0;
         }
 
-        // Método para incrementar el valor
-        public void IncrementStep()
-        {
-
-            CurrentValue += StepSize;
-
-        }
-
-        // Método para obtener el valor formateado
-        public string GetFormattedValue()
-        {
-            return CurrentValue.ToString();
-        }
-
-        // Método para reiniciar al valor inicial
-        public void Reset()
-        {
-            Initialize();
-        }
+        public void IncrementStep() => CurrentValue += StepSize;
+        public void Reset() => Initialize();
     }
 
-
-    // Clase para manejar el estado incremental de la plantilla
     public class IncrementalState
     {
         [JsonPropertyName("variableName")]
-        public string VariableName { get; set; }
-
+        public string VariableName { get; set; } = string.Empty;
         [JsonPropertyName("lastValue")]
         public int LastValue { get; set; }
-
         [JsonPropertyName("lastUsed")]
         public DateTime LastUsed { get; set; }
-
         [JsonPropertyName("totalIncrements")]
         public int TotalIncrements { get; set; }
-
-        public void Update(int newValue)
-        {
-            LastValue = newValue;
-            LastUsed = DateTime.Now;
-            TotalIncrements++;
-        }
+        public void Update(int val) { LastValue = val; LastUsed = DateTime.Now; TotalIncrements++; }
     }
 
-    // Clase helper para manejo de variables incrementales
-    public static class IncrementalVariableHelper2
+    public abstract class TemplateObject
     {
-        public static void InitializeIncrementalVariables(GlabelsTemplate template)
-        {
-            foreach (var variable in template.Variables)
-            {
-                if (variable.Increment != "never")
-                {
-                    variable.Initialize();
-
-                    if (!template.IncrementalStates.ContainsKey(variable.Name))
-                    {
-                        template.IncrementalStates[variable.Name] = new IncrementalState
-                        {
-                            VariableName = variable.Name,
-                            LastValue = variable.CurrentValue,
-                            LastUsed = DateTime.Now,
-                            TotalIncrements = 0
-                        };
-                    }
-                }
-            }
-        }
-
-        public static Dictionary<string, string> ProcessIncrementalVariables(
-            GlabelsTemplate template,
-            Dictionary<string, string> originalData,
-            int currentCopy = 1)
-        {
-            var processedData = new Dictionary<string, string>(originalData);
-
-            foreach (var variable in template.Variables)
-            {
-                if (variable.Increment != "never")
-                {
-                    // Calcular valor basado en el modo de incremento
-                    int calculatedValue = variable.Increment switch
-                    {
-                        "per_copy" => variable.CurrentValue + ((currentCopy - 1) * variable.StepSize),
-                        "per_page" => variable.CurrentValue + ((currentCopy - 1) * variable.StepSize),
-                        "per_session" => variable.CurrentValue,
-                        _ => variable.CurrentValue
-                    };
-
-                    processedData[variable.Name] = calculatedValue.ToString();
-
-                    // Actualizar estado
-                    if (template.IncrementalStates.ContainsKey(variable.Name))
-                    {
-                        template.IncrementalStates[variable.Name].Update(calculatedValue);
-                    }
-                }
-            }
-
-            return processedData;
-        }
-
-        public static void UpdateIncrementalVariables(GlabelsTemplate template, int copiesPrinted = 1)
-        {
-            foreach (var variable in template.Variables)
-            {
-                if (variable.Increment == "per_copy" || variable.Increment == "per_page")
-                {
-                    // Solo actualizar el valor base si es por copia/página
-                    for (int i = 0; i < copiesPrinted; i++)
-                    {
-                        variable.IncrementStep();
-                    }
-                }
-            }
-        }
-
-        public static void ResetAllIncrementalVariables(GlabelsTemplate template)
-        {
-            foreach (var variable in template.Variables)
-            {
-                if (variable.Increment != "never")
-                {
-                    variable.Reset();
-                }
-            }
-
-            template.IncrementalStates.Clear();
-        }
-
-        public static Dictionary<string, object> GetIncrementalVariablesInfo(GlabelsTemplate template)
-        {
-            var info = new Dictionary<string, object>();
-
-            foreach (var variable in template.Variables.Where(v => v.Increment != "never"))
-            {
-                info[variable.Name] = new
-                {
-                    Type = variable.Type,
-                    InitialValue = variable.InitialValue,
-                    CurrentValue = variable.CurrentValue,
-                    IncrementMode = variable.Increment,
-                    StepSize = variable.StepSize,
-                    State = template.IncrementalStates.ContainsKey(variable.Name)
-                        ? template.IncrementalStates[variable.Name]
-                        : null
-                };
-            }
-
-            return info;
-        }
-
-        public static bool HasIncrementalVariables(GlabelsTemplate template)
-        {
-            return template.Variables.Any(v => v.Increment != "never");
-        }
+        public string Id { get; set; } = Guid.NewGuid().ToString();
+        public double X { get; set; }
+        public double Y { get; set; }
+        public double Width { get; set; }
+        public double Height { get; set; }
+        public bool LockAspectRatio { get; set; }
+        public TransformationMatrix Matrix { get; set; } = new();
+        public ShadowEffect? Shadow { get; set; }
+        public bool Rotate { get; set; }
+        public float RotationAngle { get; set; }
     }
+
+    public class TextObject : TemplateObject
+    {
+        public string Content { get; set; } = string.Empty;
+        public string FontFamily { get; set; } = "Arial";
+        public double FontSize { get; set; } = 10;
+        public string Color { get; set; } = "#000000";
+        public TextAlignment Alignment { get; set; }
+        public VerticalAlignment VerticalAlignment { get; set; }
+        public bool FontItalic { get; set; }
+        public bool FontUnderline { get; set; }
+        public string FontWeight { get; set; } = "normal";
+        public double LineSpacing { get; set; } = 1.0;
+        public bool AutoShrink { get; set; }
+        public WrapMode WrapMode { get; set; }
+    }
+
+    public class BarcodeObject : TemplateObject
+    {
+        public string Data { get; set; } = string.Empty;
+        public string BarcodeType { get; set; } = string.Empty;
+        public bool ShowText { get; set; }
+        public bool Checksum { get; set; }
+        public string Color { get; set; } = "#000000";
+        public string Backend { get; set; } = "gnu-barcode";
+    }
+
+    public class BoxObject : TemplateObject
+    {
+        public string FillColor { get; set; } = "none";
+        public string LineColor { get; set; } = "#000000";
+        public double LineWidth { get; set; } = 1.0;
+    }
+
+    public class LineObject : TemplateObject
+    {
+        public double Dx { get; set; }
+        public double Dy { get; set; }
+        public string LineColor { get; set; } = "#000000";
+        public double LineWidth { get; set; } = 1.0;
+    }
+
+    public class EllipseObject : TemplateObject
+    {
+        public string FillColor { get; set; } = "none";
+        public string LineColor { get; set; } = "#000000";
+        public double LineWidth { get; set; } = 1.0;
+    }
+
+    public class ImageObject : TemplateObject
+    {
+        public string Source { get; set; } = string.Empty;
+        public new bool LockAspectRatio { get; set; } = true;
+    }
+
+    public enum TextAlignment { Left, Center, Right }
+    public enum VerticalAlignment { Top, Middle, Bottom }
+    public enum WrapMode { Word, Character, None }
 }

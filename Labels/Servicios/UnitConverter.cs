@@ -20,67 +20,28 @@ namespace SAE.Print.Labels.Servicios
 
         public static double ParseMeasurement(string measurement, string defaultUnit = "pt")
         {
-            if (string.IsNullOrWhiteSpace(measurement))
-                return 0;
+            if (string.IsNullOrWhiteSpace(measurement)) return 0;
 
-            measurement = measurement.Trim().ToLower();
+            var match = System.Text.RegularExpressions.Regex.Match(measurement.Trim(), @"^([-+]?[0-9]*\.?[0-9]+)(.*)$");
+            if (!match.Success) return 0;
 
-            // Detectar dónde empieza la unidad (primer caracter no numérico)
-            int unitIndex = -1;
-            for (int i = 0; i < measurement.Length; i++)
-            {
-                if (!char.IsDigit(measurement[i]) && measurement[i] != '.' && measurement[i] != '-')
-                {
-                    unitIndex = i;
-                    break;
-                }
-            }
-
-            string numberPart;
-            string unitPart;
-
-            if (unitIndex == -1)
-            {
-                // No hay unidad → usar default
-                numberPart = measurement;
-                unitPart = defaultUnit;
-            }
-            else
-            {
-                numberPart = measurement.Substring(0, unitIndex);
-                unitPart = measurement.Substring(unitIndex);
-            }
-
-            // Intentar parsear el número
-            if (!double.TryParse(numberPart, System.Globalization.NumberStyles.Float,
+            if (!double.TryParse(match.Groups[1].Value, System.Globalization.NumberStyles.Float,
                 System.Globalization.CultureInfo.InvariantCulture, out double value))
             {
-                value = 0; // fallback seguro
+                return 0;
             }
 
-            // Normalizar unidad
-            unitPart = unitPart switch
-            {
-                "pt" => "pt",
-                "in" => "in",
-                "mm" => "mm",
-                "cm" => "cm",
-                "px" => "px",
-                _ => defaultUnit
-            };
+            string unitPart = match.Groups[2].Value.Trim().ToLower();
+            if (string.IsNullOrEmpty(unitPart)) unitPart = defaultUnit;
 
-            // Convertir a puntos
-            double result = unitPart switch
-            {
-                "pt" => value,
-                "in" => value * PointsPerInch,
-                "mm" => value * PointsPerMillimeter,
-                "cm" => value * PointsPerCentimeter,
-                "px" => value * PointsPerInch / 96, // 96 DPI
-                _ => value
-            };
+            double result;
+            if (unitPart == "pt") result = value;
+            else if (unitPart == "in") result = value * PointsPerInch;
+            else if (unitPart == "mm") result = value * PointsPerMillimeter;
+            else if (unitPart == "cm") result = value * PointsPerCentimeter;
+            else if (unitPart == "px") result = value * PointsPerInch / 96.0;
+            else result = value;
 
-            // 🔒 Nunca permitir negativos
             return Math.Max(0, result);
         }
     }

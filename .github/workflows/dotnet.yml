@@ -1,0 +1,41 @@
+name: .NET CI
+
+on:
+  push:
+    branches: [ "main", "develop" ]
+  pull_request:
+    branches: [ "main", "develop" ]
+
+jobs:
+  build:
+    runs-on: windows-latest
+
+    steps:
+    - uses: actions/checkout@v4
+      with:
+        submodules: recursive
+
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: 10.0.x
+
+    - name: Restore dependencies
+      run: dotnet restore SAE_PRINT.csproj
+
+    - name: Build
+      run: dotnet build SAE_PRINT.csproj --no-restore -c Release
+
+    - name: Test
+      run: dotnet test Tests/SAE.Print.Tests/SAE.Print.Tests.csproj --no-build -c Release --verbosity normal
+
+    - name: Pack
+      if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+      run: dotnet pack SAE_PRINT.csproj --no-build -c Release -o nupkg
+
+    - name: Upload Artifact
+      if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+      uses: actions/upload-artifact@v4
+      with:
+        name: nuget-package
+        path: nupkg/*.nupkg
