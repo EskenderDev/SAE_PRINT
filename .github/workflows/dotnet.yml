@@ -53,7 +53,8 @@ jobs:
         NUGET_API_KEY: ${{ secrets.NUGET_API_KEY }}
       run: |
         if ("$env:NUGET_API_KEY" -ne "") {
-            dotnet nuget push nupkg/*.nupkg -k $env:NUGET_API_KEY -s https://api.nuget.org/v3/index.json --skip-duplicate
+            $nupkgFile = (Get-ChildItem nupkg/*.nupkg | Select-Object -First 1).FullName
+            dotnet nuget push $nupkgFile -k $env:NUGET_API_KEY -s https://api.nuget.org/v3/index.json --skip-duplicate
         } else {
             Write-Host "No NUGET_API_KEY found. Skipping NuGet push."
         }
