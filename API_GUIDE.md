@@ -1,45 +1,52 @@
 # SAE.Print API Guide
 
-This guide describes the core interfaces and how to extend the `SAE.Print` library.
-
 ## Core Interfaces
 
-### `IPdfGenerator`
-Responsible for converting a `GenerarDocumentoRequest` into a PDF byte array.
-- **Namespace**: `SAE.Print.Core.Interfaces`
-- **Method**: `Task<byte[]> GenerateAsync(GenerarDocumentoRequest request)`
+### IPdfGenerator
+Interface for PDF generation.
+- `Task<byte[]> GenerateAsync(GenerarDocumentoRequest documento)`: Generates a PDF byte array.
 
-### `ITicketGenerator`
-Generates ESC/POS commands or raw text for thermal tickets.
-- **Namespace**: `SAE.Print.Core.Interfaces`
-- **Method**: `Task<byte[]> GenerateAsync(GenerarDocumentoRequest request)`
+### ITicketGenerator
+Interface for ESC/POS ticket generation.
+- `Task<byte[]> GenerateAsync(GenerarDocumentoRequest documento)`: Generates an ESC/POS byte array.
 
-### `IPrinterService`
-A high-level service to manage print jobs.
-- **Namespace**: `SAE.Print.Core.Interfaces`
+### IPrinterTransport
+Low-level transport interface for RAW printing.
+- `bool Open(string name)`
+- `bool Close()`
+- `bool Write(byte[] buffer, int offset, int count)`
+- `bool StartDocument(string docName, string dataType = "RAW")`
+- `bool EndDocument()`
 
-### `IPrinterTransport`
-Low-level abstraction for sending bytes to a physical device.
-- **Implementations**:
-  - `NativeWindowsPrinterTransport`: Uses Win32 `winspool.drv` for RAW printing.
+**Implementations**:
+- `NativeWindowsPrinterTransport`: Windows-only (via `winspool.drv`).
+- `LinuxPrinterTransport`: Linux-only (via `lp` command).
+
+### IPrinterService
+High-level service for printing operations.
+- `bool PrintText(string printerName, string content, string docName = "")`
+- `bool PrintLines(string printerName, IEnumerable<string> lines)`
+
+**Implementation**:
+- `PrinterService`: Cross-platform, requires an `IPrinterTransport` implementation.
 
 ## Label Component
 
-The `SAE.Print.Labels` namespace contains a complex engine for handling G-Labels templates.
+### ILabelRenderer
+The core engine for rendering labels.
+- `string GenerateZpl(GlabelsTemplate template, Dictionary<string, string> data)`: Generates a ZPL string.
+- `Bitmap RenderToBitmap(GlabelsTemplate template, Dictionary<string, string> data)`: Renders as a GDI+ Bitmap.
 
-### `ILabelRenderer`
-The main interface for processing labels.
-- `GenerateZpl(...)`: Produces Zebra Programming Language code.
-- `PrintLabel(...)`: Sends the label to a GDI+ printer.
-- `RenderToImage(...)`: Renders the label to a GDI+ `Image` or `Bitmap`.
-
-## Customization
-
-To add a new document type:
-1. Implement a new generator interface in `Core`.
-2. Provide the concrete implementation in `Infrastructure`.
-3. Register it in your Dependency Injection container.
+## Usage Example (DI)
 
 ```csharp
-services.AddTransient<IPdfGenerator, MyCustomPdfGenerator>();
+services.AddTransient<IPdfGenerator, PdfGenerator>();
+services.AddTransient<ITicketGenerator, TicketGenerator>();
+
+if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+    services.AddTransient<IPrinterTransport, NativeWindowsPrinterTransport>();
+else
+    services.AddTransient<IPrinterTransport, LinuxPrinterTransport>();
+
+services.AddTransient<IPrinterService, PrinterService>();
 ```

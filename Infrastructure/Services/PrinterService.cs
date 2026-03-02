@@ -3,11 +3,11 @@ using System.Text;
 
 namespace SAE.Print.Infrastructure.Services;
 
-public class WindowsPrinterService : IPrinterService
+public class PrinterService : IPrinterService
 {
     private readonly IPrinterTransport _transport;
 
-    public WindowsPrinterService(IPrinterTransport transport)
+    public PrinterService(IPrinterTransport transport)
     {
         _transport = transport;
     }
